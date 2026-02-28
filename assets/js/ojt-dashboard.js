@@ -68,7 +68,7 @@ async function apiPost(url, body) {
 function showNotice() { document.getElementById('notice-modal').classList.remove('hidden'); }
 function hideNotice() {
     document.getElementById('notice-modal').classList.add('hidden');
-    sessionStorage.setItem('notice_accepted', '1');
+    if (currentUser) sessionStorage.setItem(`notice_accepted_${currentUser.id}`, '1');
 }
 
 // ── Training Supervisor modal ─────────────────────────────
@@ -110,7 +110,7 @@ async function handleSupervisorModalSave() {
 async function handleLogout() {
     await apiPost('../api/auth.php', { action: 'logout' });
     if (clockInterval) clearInterval(clockInterval);
-    sessionStorage.removeItem('notice_accepted'); // Reset so notice shows on next login
+    if (currentUser) sessionStorage.removeItem(`notice_accepted_${currentUser.id}`);
     window.location.href = 'login.php';
 }
 
@@ -131,9 +131,20 @@ function bootDashboard(user) {
     document.getElementById('id-card-email').textContent = user.email;
     // Populate settings tab
     populateSettingsTab(user);
-    // Show supervisor setup modal if not yet set
+    // Show notice modal once per user per browser session
+    if (!sessionStorage.getItem(`notice_accepted_${user.id}`)) {
+        showNotice();
+    }
+    // Show supervisor setup modal if not yet set (after notice is dismissed)
     if (!user.training_supervisor) {
-        showSupervisorModal();
+        // Delay so supervisor modal appears after notice is accepted
+        document.getElementById('notice-accept-btn').addEventListener('click', () => {
+            showSupervisorModal();
+        }, { once: true });
+        if (sessionStorage.getItem(`notice_accepted_${user.id}`)) {
+            // Notice already accepted before — show supervisor modal immediately
+            showSupervisorModal();
+        }
     }
 }
 
@@ -463,8 +474,6 @@ function setupEventListeners() {
 async function init() {
     setupEventListeners();
     setupTabs();
-
-    if (!sessionStorage.getItem('notice_accepted')) showNotice();
 
     const data = await apiGet('../api/auth.php?action=session');
     if (!data.loggedIn) {
