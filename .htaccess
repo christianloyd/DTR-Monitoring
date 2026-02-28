@@ -19,11 +19,9 @@ ServerSignature Off
 </IfModule>
 
 # ─── Protect Sensitive Files ────────────────────────────────
-# Block direct HTTP access to PHP includes/config files
-<FilesMatch "^(db|auth)\.php$">
-    Order Allow,Deny
-    Deny from all
-</FilesMatch>
+# NOTE: includes/db.php and includes/auth.php are protected by includes/.htaccess (Deny from all).
+# No additional FilesMatch needed here — it would incorrectly block api/auth.php too.
+
 
 # Block SQL dumps and patch/migration scripts
 <FilesMatch "\.(sql|ps1)$">
