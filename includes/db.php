@@ -3,10 +3,25 @@
 // includes/db.php  — PDO Connection
 // ============================================================
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'ojt_dtr_system');
-define('DB_USER', 'root');
-define('DB_PASS', '');          // Default XAMPP password (empty)
+// ============================================================
+// 🚀 PRODUCTION — Replace the values below when deploying.
+//    Copy your hosting panel's MySQL credentials here and
+//    comment out the "Local Development" block beneath.
+// ============================================================
+//
+// define('DB_HOST',    'sql307.infinityfree.com');   // MySQL Hostname
+// define('DB_NAME',    'if0_41269751_XXX');           // MySQL Database Name
+// define('DB_USER',    'if0_41269751');               // MySQL Username
+// define('DB_PASS',    'YOUR_PASSWORD_HERE');         // MySQL Password
+// define('DB_CHARSET', 'utf8mb4');
+//
+// ============================================================
+// 💻 LOCAL DEVELOPMENT (XAMPP defaults) — comment out for production
+// ============================================================
+define('DB_HOST',    'localhost');
+define('DB_NAME',    'ojt_dtr_system');
+define('DB_USER',    'root');
+define('DB_PASS',    '');           // Default XAMPP password (empty)
 define('DB_CHARSET', 'utf8mb4');
 
 function getDB(): PDO {
