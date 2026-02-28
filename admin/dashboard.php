@@ -28,13 +28,7 @@ if (!$user || $user['role'] !== 'admin') {
   </style>
   <script src="../assets/js/jsqr.min.js"></script>
  </head>
- <body class="h-full bg-slate-100 font-sans">
-  <body class="h-full bg-slate-100 font-sans">
-
-  <!-- ── Mobile sidebar backdrop ───────────────────────── -->
   <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
-
-  <div class="flex h-full">
 
    <!-- ══════════════════════════════════════════════════
         LEFT SIDEBAR
@@ -143,7 +137,7 @@ if (!$user || $user['role'] !== 'admin') {
    <!-- ══════════════════════════════════════════════════
         MAIN AREA  (offset by sidebar width on lg+)
    ══════════════════════════════════════════════════ -->
-   <div class="flex-1 flex flex-col min-h-full lg:ml-64">
+   <div class="min-h-screen flex flex-col lg:ml-64 transition-all duration-300">
 
     <!-- Mobile top bar -->
     <header class="lg:hidden bg-slate-900 text-white px-4 py-3 flex items-center gap-3 shadow flex-shrink-0">
@@ -481,7 +475,7 @@ if (!$user || $user['role'] !== 'admin') {
     </div>
    </main>
 
-  </div><!-- /flex -->
+   </div><!-- /main content wrapper -->
 
   <!-- ── EDIT RECORD MODAL ──────────────────────────────── -->
   <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
