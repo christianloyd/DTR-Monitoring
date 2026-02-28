@@ -110,6 +110,7 @@ async function handleSupervisorModalSave() {
 async function handleLogout() {
     await apiPost('../api/auth.php', { action: 'logout' });
     if (clockInterval) clearInterval(clockInterval);
+    sessionStorage.removeItem('notice_accepted'); // Reset so notice shows on next login
     window.location.href = 'login.php';
 }
 
