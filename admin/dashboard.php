@@ -29,55 +29,146 @@ if (!$user || $user['role'] !== 'admin') {
   <script src="../assets/js/jsqr.min.js"></script>
  </head>
  <body class="h-full bg-slate-100 font-sans">
-  <div class="h-full flex flex-col">
+  <body class="h-full bg-slate-100 font-sans">
 
-   <!-- ── TOP NAVBAR ──────────────────────────────────────── -->
-   <header class="bg-slate-900 text-white shadow-xl flex-shrink-0">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+  <!-- ── Mobile sidebar backdrop ───────────────────────── -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
+
+  <div class="flex h-full">
+
+   <!-- ══════════════════════════════════════════════════
+        LEFT SIDEBAR
+   ══════════════════════════════════════════════════ -->
+   <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white flex flex-col shadow-2xl
+           transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+
+    <!-- Brand -->
+    <div class="px-5 py-5 border-b border-slate-700/60 flex-shrink-0">
      <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 flex items-center justify-center shadow shadow-rose-500/30">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 flex items-center justify-center shadow-lg shadow-rose-500/30">
        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
        </svg>
       </div>
       <div>
-       <p class="font-bold text-sm">OJT DTR — Admin Panel</p>
-       <p class="text-xs text-slate-400">Welcome, <?= htmlspecialchars($user['name']) ?></p>
+       <p class="font-bold text-sm leading-tight">OJT DTR</p>
+       <p class="text-xs text-slate-400">Admin Panel</p>
       </div>
      </div>
-     <div class="flex items-center gap-3">
-      <a href="../index.php"
-       class="text-xs text-slate-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-800">
-       Trainee View
-      </a>
-      <button id="logout-btn"
-       class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
-       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+     <div class="mt-3 flex items-center gap-2 px-1">
+      <div class="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center flex-shrink-0">
+       <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
        </svg>
-       Logout
-      </button>
+      </div>
+      <div class="min-w-0">
+       <p class="text-xs font-medium text-slate-200 truncate"><?= htmlspecialchars($user['name']) ?></p>
+       <p class="text-xs text-slate-500">Administrator</p>
+      </div>
      </div>
     </div>
 
-    <!-- Sub-nav tabs -->
-    <nav class="max-w-7xl mx-auto px-4 pb-0">
-     <div class="flex gap-1">
-      <button data-tab="overview"  class="adm-tab active px-4 py-2.5 text-sm font-medium rounded-t-lg whitespace-nowrap transition-all">📊 Overview</button>
-      <button data-tab="trainees"  class="adm-tab px-4 py-2.5 text-sm font-medium rounded-t-lg whitespace-nowrap transition-all">👥 Trainees</button>
-      <button data-tab="records"   class="adm-tab px-4 py-2.5 text-sm font-medium rounded-t-lg whitespace-nowrap transition-all">📋 Attendance</button>
-      <button data-tab="scanner"   class="adm-tab px-4 py-2.5 text-sm font-medium rounded-t-lg whitespace-nowrap transition-all">📷 Scanner</button>
-      <button data-tab="reports"   class="adm-tab px-4 py-2.5 text-sm font-medium rounded-t-lg whitespace-nowrap transition-all">📄 Reports</button>
-      <button data-tab="logs"      class="adm-tab px-4 py-2.5 text-sm font-medium rounded-t-lg whitespace-nowrap transition-all">🕵️ Audit Logs</button>
-     </div>
-    </nav>
-   </header>
+    <!-- Nav items -->
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
 
-   <!-- ── MAIN CONTENT ────────────────────────────────────── -->
-   <main class="flex-1 overflow-auto">
-    <div class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+     <p class="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2">Menu</p>
+
+     <button data-tab="overview" class="adm-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+      </svg>
+      Overview
+     </button>
+
+     <button data-tab="trainees" class="adm-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/>
+      </svg>
+      Trainees
+     </button>
+
+     <button data-tab="records" class="adm-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+      </svg>
+      Attendance
+     </button>
+
+     <button data-tab="scanner" class="adm-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+      QR Scanner
+     </button>
+
+     <button data-tab="reports" class="adm-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      Reports
+     </button>
+
+     <button data-tab="logs" class="adm-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      Audit Logs
+     </button>
+
+    </nav>
+
+    <!-- Bottom actions -->
+    <div class="px-3 py-4 border-t border-slate-700/60 flex-shrink-0 space-y-1">
+     <a href="../index.php"
+      class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-700/60 transition-all">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+      </svg>
+      Trainee View
+     </a>
+     <button id="logout-btn"
+      class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-rose-600/30 transition-all">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+      Logout
+     </button>
+    </div>
+
+   </aside>
+
+   <!-- ══════════════════════════════════════════════════
+        MAIN AREA  (offset by sidebar width on lg+)
+   ══════════════════════════════════════════════════ -->
+   <div class="flex-1 flex flex-col min-h-full lg:ml-64">
+
+    <!-- Mobile top bar -->
+    <header class="lg:hidden bg-slate-900 text-white px-4 py-3 flex items-center gap-3 shadow flex-shrink-0">
+     <button onclick="openSidebar()" class="p-1.5 rounded-lg hover:bg-slate-700 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+     </button>
+     <span class="font-semibold text-sm">OJT DTR — Admin</span>
+    </header>
+
+    <!-- Page heading bar -->
+    <div class="bg-white border-b border-slate-200 px-6 py-4 flex-shrink-0 flex items-center justify-between">
+     <div>
+      <h1 id="page-title" class="text-lg font-bold text-slate-800">Overview</h1>
+      <p class="text-xs text-slate-400 mt-0.5">OJT DTR Monitoring System</p>
+     </div>
+     <span id="page-badge" class="px-3 py-1 text-xs font-semibold rounded-full bg-rose-100 text-rose-700">Admin</span>
+    </div>
+
+    <!-- ── MAIN CONTENT ────────────────────────────── -->
+    <main class="flex-1 overflow-auto">
+     <div class="px-6 py-6 space-y-6">
+
+
 
      <!-- ══ OVERVIEW TAB ══════════════════════════════════ -->
      <div id="tab-overview" class="adm-content space-y-6 animate-fade-in">

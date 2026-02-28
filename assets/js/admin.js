@@ -36,15 +36,17 @@ function setupTabs() {
     document.querySelectorAll('.adm-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.adm-tab').forEach(b => {
-                b.classList.remove('active', 'bg-white', 'text-slate-800', 'shadow-sm');
-                b.classList.add('text-slate-400', 'hover:text-slate-200');
+                b.classList.remove('bg-rose-500', 'text-white', 'shadow-md', 'shadow-rose-500/30', 'active');
+                b.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200');
             });
-            btn.classList.add('active', 'bg-white', 'text-slate-800', 'shadow-sm');
-            btn.classList.remove('text-slate-400', 'hover:text-slate-200');
+            btn.classList.add('active', 'bg-rose-500', 'text-white', 'shadow-md', 'shadow-rose-500/30');
+            btn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200');
 
             document.querySelectorAll('.adm-content').forEach(c => c.classList.add('hidden'));
             const id = `tab-${btn.dataset.tab}`;
             document.getElementById(id).classList.remove('hidden');
+
+            if (window.innerWidth < 1024) closeSidebar(); // Auto-close on mobile
 
             if (btn.dataset.tab === 'trainees') loadUsers();
             if (btn.dataset.tab === 'records') loadRecords();
@@ -54,11 +56,21 @@ function setupTabs() {
         });
     });
     // Activate first tab style
-    const first = document.querySelector('.adm-tab.active');
+    const first = document.querySelector('.adm-tab.active') || document.querySelector('.adm-tab');
     if (first) {
-        first.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
-        first.classList.remove('text-slate-400', 'hover:text-slate-200');
+        first.classList.add('active', 'bg-rose-500', 'text-white', 'shadow-md', 'shadow-rose-500/30');
+        first.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200');
     }
+}
+
+// ── Mobile Sidebar Toggle ──────────────────────────────────────
+function openSidebar() {
+    document.getElementById('sidebar').classList.remove('-translate-x-full');
+    document.getElementById('sidebar-backdrop').classList.remove('hidden');
+}
+function closeSidebar() {
+    document.getElementById('sidebar').classList.add('-translate-x-full');
+    document.getElementById('sidebar-backdrop').classList.add('hidden');
 }
 
 // ── Logout ────────────────────────────────────────────────────
