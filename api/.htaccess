@@ -1,0 +1,19 @@
+# ============================================================
+# api/.htaccess — Restrict API access
+# Only allow GET and POST requests; API files should only be
+# called via JavaScript fetch/XHR, not navigated to directly.
+# ============================================================
+
+# Allow only GET and POST
+<LimitExcept GET POST>
+    Order Allow,Deny
+    Deny from all
+</LimitExcept>
+
+# Prevent directory listing
+Options -Indexes
+
+# Force JSON content-type responses (no HTML sniffing)
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+</IfModule>

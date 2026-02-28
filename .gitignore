@@ -1,0 +1,34 @@
+# ─── Node / npm ─────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+
+# ─── Build output ──────────────────────────────────────────
+dist/
+build/
+
+# ─── Local dev / patch scripts ──────────────────────────────
+_fix_redirect.ps1
+_patch_js.ps1
+_patch_js2.ps1
+_patch_register.ps1
+migrate_am_pm.php
+
+# ─── OS junk ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Editor / IDE ────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── Logs ────────────────────────────────────────────────────
+*.log
+error_log
+
+# ─── Sensitive environment / config (if added later) ─────────
+.env
+.env.*
+config.local.php

@@ -1,0 +1,6 @@
+# ============================================================
+# includes/.htaccess — Block ALL direct browser access
+# These files are server-side only (db.php, auth.php)
+# ============================================================
+Order Allow,Deny
+Deny from all

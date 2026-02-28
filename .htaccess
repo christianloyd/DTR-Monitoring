@@ -1,0 +1,128 @@
+# ============================================================
+# OJT DTR Monitoring Management System — Root .htaccess
+# Security hardening for production deployment
+# ============================================================
+
+Options -Indexes -MultiViews
+ServerSignature Off
+
+# ─── Rewrite Engine ─────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS — uncomment once SSL is active on the server
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Block access to hidden dot-files and dot-directories (e.g. .git, .env)
+    RewriteRule (^|/)\. - [F,L]
+</IfModule>
+
+# ─── Protect Sensitive Files ────────────────────────────────
+# Block direct HTTP access to PHP includes/config files
+<FilesMatch "^(db|auth)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block SQL dumps and patch/migration scripts
+<FilesMatch "\.(sql|ps1)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block access to the migration helper script at the root
+<FilesMatch "^migrate_am_pm\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block composer/npm config files
+<FilesMatch "^(package(-lock)?\.json|tailwind\.config\.js|composer\.(json|lock))$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ─── Block node_modules ─────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteRule ^node_modules/ - [F,L]
+</IfModule>
+
+# ─── Security Headers ───────────────────────────────────────
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Block MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Enable browser XSS filter (legacy browsers)
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Control referrer information
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Content Security Policy — tighten further once CDN/external assets are finalised
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';"
+
+    # Remove the PHP version header
+    Header unset X-Powered-By
+
+    # HSTS — uncomment once HTTPS is confirmed working
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# ─── PHP Hardening ──────────────────────────────────────────
+<IfModule mod_php.c>
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_flag expose_php Off
+    php_value session.cookie_httponly 1
+    php_value session.cookie_samesite "Strict"
+    # Uncomment the line below once HTTPS is active:
+    # php_value session.cookie_secure 1
+    php_value session.use_strict_mode 1
+    php_value session.use_only_cookies 1
+</IfModule>
+
+# ─── Deny common malicious request patterns ─────────────────
+<IfModule mod_rewrite.c>
+    # Block SQL Injection attempts in query strings
+    RewriteCond %{QUERY_STRING} (union.*select|select.*from|insert.*into|drop.*table|--) [NC]
+    RewriteRule .* - [F,L]
+
+    # Block common shell/script injection
+    RewriteCond %{QUERY_STRING} (base64_encode|eval\(|system\(|passthru\(|exec\() [NC]
+    RewriteRule .* - [F,L]
+
+    # Block null-byte attacks
+    RewriteCond %{QUERY_STRING} \0 [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# ─── Disable HTTP methods not needed ────────────────────────
+<LimitExcept GET POST>
+    Order Allow,Deny
+    Deny from all
+</LimitExcept>
+
+# ─── Protect the docs directory ─────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteRule ^docs/ - [F,L]
+</IfModule>
+
+# ─── Compression (performance) ──────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json
+</IfModule>
+
+# ─── Browser Caching (performance) ──────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css             "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType image/png            "access plus 1 month"
+    ExpiresByType image/jpeg           "access plus 1 month"
+    ExpiresByType image/svg+xml        "access plus 1 month"
+    ExpiresByType image/x-icon         "access plus 1 year"
+</IfModule>
