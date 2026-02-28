@@ -9,10 +9,10 @@
 //    comment out the "Local Development" block beneath.
 // ============================================================
 //
-// define('DB_HOST',    'sql307.infinityfree.com');   // MySQL Hostname
-// define('DB_NAME',    'if0_41269751_XXX');           // MySQL Database Name
-// define('DB_USER',    'if0_41269751');               // MySQL Username
-// define('DB_PASS',    'YOUR_PASSWORD_HERE');         // MySQL Password
+// define('DB_HOST',    'sql307.infinityfree.com');      // MySQL Hostname
+// define('DB_NAME',    'if0_41269751_ojt_dtr_system'); // MySQL Database Name
+// define('DB_USER',    'if0_41269751');                 // MySQL Username
+// define('DB_PASS',    '484nGjDzHS6N');                 // MySQL Password
 // define('DB_CHARSET', 'utf8mb4');
 //
 // ============================================================
