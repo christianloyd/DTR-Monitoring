@@ -46,6 +46,20 @@ function setupTabs() {
             const id = `tab-${btn.dataset.tab}`;
             document.getElementById(id).classList.remove('hidden');
 
+            const titles = {
+                'overview': { title: 'Overview', sub: 'Welcome back to OJT DTR Admin' },
+                'trainees': { title: 'Trainees', sub: 'Manage all enrolled OJT students' },
+                'records': { title: 'Attendance', sub: 'View and filter all time records' },
+                'scanner': { title: 'QR Scanner', sub: 'Scan digital IDs for manual time in/out' },
+                'reports': { title: 'Reports', sub: 'Generate printable DTR computations' },
+                'logs': { title: 'Audit Logs', sub: 'System history of edited time records' }
+            };
+            const t = titles[btn.dataset.tab];
+            if (t) {
+                document.getElementById('page-title').textContent = t.title;
+                document.getElementById('page-subtitle').textContent = t.sub;
+            }
+
             if (window.innerWidth < 1024) closeSidebar(); // Auto-close on mobile
 
             if (btn.dataset.tab === 'trainees') loadUsers();
