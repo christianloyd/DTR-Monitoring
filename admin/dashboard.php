@@ -28,13 +28,10 @@ if (!$user || $user['role'] !== 'admin') {
   </style>
   <script src="../assets/js/jsqr.min.js"></script>
  </head>
- <body class="bg-slate-50 font-sans text-slate-800 antialiased overflow-hidden h-full text-sm">
+ <body class="bg-slate-50 font-sans text-slate-800 antialiased text-sm">
   
   <?php include 'includes/sidebar.php'; ?>
 
-  <!-- ══════════════════════════════════════════════════
-       MAIN AREA 
-  ══════════════════════════════════════════════════ -->
   <div class="flex flex-col min-h-screen lg:ml-64 bg-slate-50 relative transition-all duration-300">
 
     <!-- Top Header -->
@@ -64,7 +61,7 @@ if (!$user || $user['role'] !== 'admin') {
     </header>
 
     <!-- ── SCROLLABLE PAGE CONTENT ────────────────────────────── -->
-    <main class="flex-1 overflow-auto relative">
+    <main class="flex-1">
      <div class="px-4 sm:px-8 py-8 space-y-8 max-w-[1600px] mx-auto pb-24">
 
 
